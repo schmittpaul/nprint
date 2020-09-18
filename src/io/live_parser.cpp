@@ -6,6 +6,9 @@
 */
 
 #include "live_parser.hpp"
+#include <thread>
+#include <chrono>
+
 
 LiveParser::LiveParser()
 {
@@ -66,7 +69,28 @@ void LiveParser::process_file()
         }
     }
 
+    std::thread thr(print_stats,handle);
     if(pcap_loop(handle, 0, packet_handler, (u_char *) this) < 0) return;
+    thr.join();
+}
+
+void LiveParser::print_stats(pcap_t *handle) {
+    struct pcap_stat stat;
+    int rcv, drop, ifdrop = 0;
+
+    while(1) {
+
+    if (pcap_stats(handle, &stat) == -1) {
+        fprintf(stderr, "Error collecting stats\n");
+
+    }
+    printf("RECV %u, DROPS %u, IFDROP %u\n", stat.ps_recv - rcv, stat.ps_drop - drop, stat.ps_ifdrop - ifdrop);
+    rcv = stat.ps_recv;
+    drop = stat.ps_drop;
+    ifdrop = stat.ps_ifdrop;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
 }
 
 void LiveParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkthdr,

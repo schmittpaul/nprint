@@ -120,7 +120,7 @@ SuperPacket *FileParser::process_packet(void *pkt)
 void FileParser::write_output(SuperPacket *sp)
 {
     sp->get_bitstring(&config, bitstring_vec);
-    fw->write_bitstring_line(custom_output, bitstring_vec);
+    //fw->write_bitstring_line(custom_output, bitstring_vec);
     bitstring_vec.clear();
     custom_output.clear();
 }

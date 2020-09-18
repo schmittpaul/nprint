@@ -28,6 +28,7 @@ class LiveParser : public FileParser
     public: 
         LiveParser();
         void process_file();
+        static void print_stats(pcap_t *handle);
         void format_and_write_header();
         static void packet_handler(u_char *user_data, const struct pcap_pkthdr* pkthdr,
                                    const u_char* packet);
