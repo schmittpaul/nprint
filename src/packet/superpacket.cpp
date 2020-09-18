@@ -28,8 +28,8 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
     parseable = true;
 
     this->max_payload_len = max_payload_len;
-    eth = (struct ether_header *) pkt;
-    //eth = ((struct ether_header *) ((u_char *) pkt + 4));
+    //eth = (struct ether_header *) pkt;
+    eth = ((struct ether_header *) ((u_char *) pkt + 4));
 
     /* Check if packet has an ethernet header */
     if((ntohs(eth->ether_type) == ETHERTYPE_IP) || ((ntohs(eth->ether_type) == 0x86DD)))
